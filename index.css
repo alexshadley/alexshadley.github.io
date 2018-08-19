@@ -1,0 +1,51 @@
+@font-face {
+    font-family: Palanquin;
+    src: url(palanquin-regular.ttf)
+}
+
+html, body {
+    height: 100%;
+    background-color: #f5f5f5;
+}
+
+.main-title {
+    margin-top: 50px;
+    margin-bottom: 0px;
+    font-family: Palanquin;
+    font-size: 140px;
+    color: #373737;
+}
+
+.main-subtitle-1 {
+    font-family: Palanquin;
+    font-size: 60px;
+    color: #4abdac;
+    display: inline;
+}
+
+.main-subtitle-2 {
+    font-family: Palanquin;
+    font-size: 60px;
+    color: #f7b733;
+    display: inline;
+}
+
+.main-subtitle-3 {
+    font-family: Palanquin;
+    font-size: 60px;
+    color: #fc4a1a;
+    display: inline;
+}
+
+.title-div {
+    text-align: center;
+}
+
+.subtitle-div {
+    margin-top: -20px;
+}
+
+.button {
+    border-radius: 200px;
+    border: 1px solid #373737;
+}
