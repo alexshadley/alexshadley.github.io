@@ -46,25 +46,26 @@ th, td {
     display: inline-block;
 }
 
-.nav-item-1 {
+.nav-item {
     font-size: 60px;
     padding: 0px 90px;
     border-bottom: 3px solid #373737;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+}
+
+#web-button {
     color: #fc4a1a;
 }
 
-.nav-item-2 {
-    font-size: 60px;
-    padding: 0px 90px;
+#ml-button {
     margin: 0px -5px;
-    border-bottom: 3px solid #373737;
     color: #f7b733;
 }
 
-.nav-item-3 {
-    font-size: 60px;
-    padding: 0px 90px;
-    border-bottom: 3px solid #373737;
+#fun-button {
     color: #4abdac;
 }
 
