@@ -8,13 +8,28 @@ table{
 
 th, td {
     width: 600px;
+    height: 420px;
     border-bottom: 2px solid #999;
     padding: 8px;
 }
 
-h3 {
+.portfolio-link {
     font-size: 40px;
-    margin: 0px 0px;
+    margin: 0px;
+    color: #373737;
+    text-decoration: none;
+}
+
+.red-link:hover {
+    color: #fc4a1a;
+}
+
+.yellow-link:hover {
+    color: #f7b733;
+}
+
+.blue-link:hover {
+    color: #4abdac;
 }
 
 .portfolio-title {
