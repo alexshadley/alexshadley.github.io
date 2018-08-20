@@ -8,13 +8,28 @@ table{
 
 th, td {
     width: 600px;
+    height: 420px;
     border-bottom: 2px solid #999;
     padding: 8px;
 }
 
-h3 {
+.portfolio-link {
     font-size: 40px;
-    margin: 0px 0px;
+    margin: 0px;
+    color: #373737;
+    text-decoration: none;
+}
+
+.red-link:hover {
+    color: #fc4a1a;
+}
+
+.yellow-link:hover {
+    color: #f7b733;
+}
+
+.blue-link:hover {
+    color: #4abdac;
 }
 
 .portfolio-title {
@@ -31,25 +46,26 @@ h3 {
     display: inline-block;
 }
 
-.nav-item-1 {
+.nav-item {
     font-size: 60px;
     padding: 0px 90px;
     border-bottom: 3px solid #373737;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+}
+
+#web-button {
     color: #fc4a1a;
 }
 
-.nav-item-2 {
-    font-size: 60px;
-    padding: 0px 90px;
+#ml-button {
     margin: 0px -5px;
-    border-bottom: 3px solid #373737;
     color: #f7b733;
 }
 
-.nav-item-3 {
-    font-size: 60px;
-    padding: 0px 90px;
-    border-bottom: 3px solid #373737;
+#fun-button {
     color: #4abdac;
 }
 
