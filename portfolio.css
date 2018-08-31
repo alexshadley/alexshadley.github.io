@@ -40,6 +40,7 @@ th, td {
 
 .portfolio-nav-wrapper {
     text-align: center;
+    margin-top: 200px;
 }
 
 .portfolio-nav {
@@ -49,7 +50,7 @@ th, td {
 .nav-item {
     font-size: 60px;
     padding: 0px 90px;
-    border-bottom: 3px solid #373737;
+    border-bottom: 3px none #373737;
 }
 
 .nav-item:hover {
