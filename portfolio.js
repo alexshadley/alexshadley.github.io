@@ -30,6 +30,56 @@ function startNavAnimation(callingTab) {
     }
 }
 
+function reverseSpreadAnimation(element) {
+    const distance = 3.0;
+    const acceleration = 0.01;
+    var spacing = 3.0;
+    var velocity = 0.0;
+
+    element.animationId = setInterval(frame, 3);
+    function frame() {
+        if(spacing < (distance/2)){
+            velocity += acceleration;
+        }
+        else{
+            velocity -= acceleration;
+        }
+        spacing += velocity;
+        element.style.letterSpacing = spacing;
+
+        // exit condition
+        if(spacing <= 0 || velocity > 0){
+            clearInterval(element.animationId);
+        }
+    }
+
+}
+
+function spreadAnimation(element) {
+    const distance = 5.0;
+    const acceleration = 0.01;
+    var spacing = 0.0;
+    var velocity = 0.0;
+
+    element.animationId = setInterval(frame, 3);
+    function frame() {
+        if(spacing < (distance/2)){
+            velocity += acceleration;
+        }
+        else{
+            velocity -= acceleration;
+        }
+        spacing += velocity;
+        element.style.letterSpacing = spacing;
+
+        // exit condition
+        if(spacing >= distance || velocity < 0){
+            clearInterval(element.animationId);
+        }
+    }
+
+}
+
 function initNav() {
     document.getElementById('web-button').onclick = function() {
         displayTab('web');
@@ -99,11 +149,18 @@ window.onload = function() {
         link.classList.add(linkTypes[getRandomInt(3)]);
 
         // change the hover color each time the user leaves the link
-        link.onmouseleave = function() {
+        link.addEventListener('mouseleave', function(event) {
             this.className = '';
             this.classList.add('portfolio-link');
-            this.classList.add(linkTypes[getRandomInt(3)])
-        }
+            this.classList.add(linkTypes[getRandomInt(3)]);
+
+            clearInterval(this.animationId);
+            reverseSpreadAnimation(this);
+        });
+
+        link.addEventListener('mouseover', function(event) {
+            spreadAnimation(this);
+        });
     }
 
     // start with no tab
