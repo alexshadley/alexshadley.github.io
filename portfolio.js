@@ -31,6 +31,9 @@ function startNavAnimation(callingTab) {
 }
 
 function reverseSpreadAnimation(element) {
+    // clear any existing animation
+    clearInterval(element.animationId);
+
     const distance = 3.0;
     const acceleration = 0.01;
     var spacing = 3.0;
@@ -56,6 +59,9 @@ function reverseSpreadAnimation(element) {
 }
 
 function spreadAnimation(element) {
+    // clear any existing animation
+    clearInterval(element.animationId);
+
     const distance = 5.0;
     const acceleration = 0.01;
     var spacing = 0.0;
@@ -154,7 +160,6 @@ window.onload = function() {
             this.classList.add('portfolio-link');
             this.classList.add(linkTypes[getRandomInt(3)]);
 
-            clearInterval(this.animationId);
             reverseSpreadAnimation(this);
         });
 
