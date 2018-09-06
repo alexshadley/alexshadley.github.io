@@ -51,14 +51,16 @@ th, td {
     font-size: 60px;
     padding: 0px 90px;
     border-bottom: 3px none #373737;
-}
-
-.nav-item:hover {
-    text-decoration: underline;
+    transition: all 0.5s ease;
 }
 
 #web-button {
     color: #fc4a1a;
+}
+
+#web-button:hover {
+    letter-spacing: 8px;
+    padding: 0px 78px;
 }
 
 #ml-button {
@@ -66,8 +68,18 @@ th, td {
     color: #f7b733;
 }
 
+#ml-button:hover {
+    letter-spacing: 7px;
+    padding: 0px 34px;
+}
+
 #fun-button {
     color: #4abdac;
+}
+
+#fun-button:hover {
+    letter-spacing: 8px;
+    padding: 0px 78px;
 }
 
 .portfolio-img {

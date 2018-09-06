@@ -21,4 +21,23 @@ html, body {
     margin-right: 20px;
     text-decoration: none;
     color: #373737;
+    transition: all 0.4s ease;
+}
+
+.blue-button:hover {
+    color: #4abdac;
+    border-color: #4abdac;
+    border-radius: 20px;
+}
+
+.yellow-button:hover {
+    color: #f7b733;
+    border-color: #f7b733;
+    border-radius: 20px;
+}
+
+.red-button:hover {
+    color: #fc4a1a;
+    border-color: #fc4a1a;
+    border-radius: 20px;
 }
