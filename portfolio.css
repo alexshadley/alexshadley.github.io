@@ -13,6 +13,11 @@ th, td {
     padding: 8px;
 }
 
+.project-bottom-link {
+    color: #fc4a1a;
+    font-weight: bold;
+}
+
 .portfolio-link {
     font-size: 40px;
     margin: 0px;
