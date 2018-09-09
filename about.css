@@ -1,0 +1,30 @@
+.content {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.title-div {
+    float: left;
+}
+
+.about-title {
+    font-size: 80px;
+}
+
+.headshot-div {
+    float: right;
+}
+
+.headshot {
+    width: 400px;
+    height: 400px;
+    border-radius: 100%;
+}
+
+.text-div {
+    clear: both;
+}
+
+p {
+    font-size: 30px;
+}
