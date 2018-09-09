@@ -1,3 +1,5 @@
+"use strict";
+
 var tabNames = ['web', 'ml', 'fun'];
 var buttonNames = ['web-button', 'ml-button', 'fun-button']
 var linkTypes = ['red-link', 'yellow-link', 'blue-link'];
