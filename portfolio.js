@@ -152,6 +152,7 @@ window.onload = function() {
         startNavAnimation('fun');
     }
 
+    /*
     var links = document.getElementsByClassName('portfolio-link');
     for(const link of links) {
         link.classList.add(linkTypes[getRandomInt(3)]);
@@ -168,7 +169,7 @@ window.onload = function() {
         link.addEventListener('mouseover', function(event) {
             spreadAnimation(this);
         });
-    }
+    }*/
 
     // start with no tab
     displayTab('none');
