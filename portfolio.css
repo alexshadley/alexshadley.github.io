@@ -13,6 +13,10 @@ th, td {
     padding: 8px;
 }
 
+tr {
+    display: none;
+}
+
 .project-bottom-link {
     color: #fc4a1a;
     font-weight: bold;
