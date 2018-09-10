@@ -99,29 +99,29 @@ function initNav() {
         displayTab('fun');
     }
 
-    for(const button of buttonNames){
-        document.getElementById(button).style.borderBottomStyle = 'solid';
+    for(var i = 0; i < buttonNames.length; i++){
+        document.getElementById(buttonNames[i]).style.borderBottomStyle = 'solid';
     }
 }
 
 function displayTab(tabName) {
     // hide everything
-    for(const tag of tabNames) {
-        var rows = document.getElementsByClassName(tag);
-        for(const row of rows) {
-            row.style.display = 'none';
+    for(var i = 0; i < tabNames.length; i++) {
+        var rows = document.getElementsByClassName(tabNames[i]);
+        for(var j = 0; j < rows.length; j++) {
+            rows[j].style.display = 'none';
         }
     }
 
     // only show the row we want
     var rows = document.getElementsByClassName(tabName);
-    for(const row of rows) {
-        row.style.display = 'block';
+    for(var i = 0; i < rows.length; i++) {
+        rows[i].style.display = 'block';
     }
 
     // set all borders to black
-    for(const button of buttonNames) {
-        document.getElementById(button).style.borderBottomColor = '#373737';
+    for(var i = 0; i < buttonNames.length; i++) {
+        document.getElementById(buttonNames[i]).style.borderBottomColor = '#373737';
     }
 
     // set the selected tab underline color
