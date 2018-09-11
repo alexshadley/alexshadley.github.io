@@ -32,62 +32,6 @@ function startNavAnimation(callingTab) {
     }
 }
 
-function reverseSpreadAnimation(element) {
-    // clear any existing animation
-    clearInterval(element.animationId);
-
-    const distance = 3.0;
-    const acceleration = 0.01;
-    var spacing = 3.0;
-    var velocity = 0.0;
-
-    element.animationId = setInterval(frame, 3);
-    function frame() {
-        if(spacing < (distance/2)){
-            velocity += acceleration;
-        }
-        else{
-            velocity -= acceleration;
-        }
-        spacing += velocity;
-        element.style.letterSpacing = spacing;
-
-        // exit condition
-        if(spacing <= 0 || velocity > 0){
-            clearInterval(element.animationId);
-        }
-    }
-
-}
-
-function spreadAnimation(element) {
-    // clear any existing animation
-    clearInterval(element.animationId);
-
-    const distance = 5.0;
-    const acceleration = 0.01;
-    var spacing = 0.0;
-    var velocity = 0.0;
-
-    element.animationId = setInterval(frame, 3);
-    function frame() {
-        if(spacing < (distance/2)){
-            velocity += acceleration;
-        }
-        else{
-            velocity -= acceleration;
-        }
-        spacing += velocity;
-        element.style.letterSpacing = spacing;
-
-        // exit condition
-        if(spacing >= distance || velocity < 0){
-            clearInterval(element.animationId);
-        }
-    }
-
-}
-
 function initNav() {
     document.getElementById('web-button').onclick = function() {
         displayTab('web');
@@ -136,10 +80,6 @@ function displayTab(tabName) {
     }
 }
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-
 // can't bind onclicks to functions till the page is loaded
 window.onload = function() {
     document.getElementById('web-button').onclick = function() {
@@ -151,25 +91,6 @@ window.onload = function() {
     document.getElementById('fun-button').onclick = function() {
         startNavAnimation('fun');
     }
-
-    /*
-    var links = document.getElementsByClassName('portfolio-link');
-    for(const link of links) {
-        link.classList.add(linkTypes[getRandomInt(3)]);
-
-        // change the hover color each time the user leaves the link
-        link.addEventListener('mouseleave', function(event) {
-            this.className = '';
-            this.classList.add('portfolio-link');
-            this.classList.add(linkTypes[getRandomInt(3)]);
-
-            reverseSpreadAnimation(this);
-        });
-
-        link.addEventListener('mouseover', function(event) {
-            spreadAnimation(this);
-        });
-    }*/
 
     // start with no tab
     displayTab('none');
