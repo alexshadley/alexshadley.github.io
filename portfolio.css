@@ -13,6 +13,10 @@ th, td {
     padding: 8px;
 }
 
+tr {
+    display: none;
+}
+
 .project-bottom-link {
     color: #fc4a1a;
     font-weight: bold;
@@ -56,7 +60,7 @@ th, td {
     font-size: 60px;
     padding: 0px 90px;
     border-bottom: 3px none #373737;
-    transition: all 0.5s ease;
+    transition: all 0.5s ease, border-bottom 0.2s;
 }
 
 #web-button {

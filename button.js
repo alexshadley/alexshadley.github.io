@@ -1,4 +1,13 @@
-buttonTypes = ['blue-button', 'yellow-button', 'red-button'];
+"use strict";
+/*
+*   Self-contained code to drive buttons
+*/
+
+var buttonTypes = ['blue-button', 'yellow-button', 'red-button'];
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 
 function getRandomButtonType() {
     var selection = getRandomInt(buttonTypes.length);
@@ -7,7 +16,10 @@ function getRandomButtonType() {
 
 window.onload = function() {
     var buttons = document.getElementsByClassName('button');
-    for(const button of buttons) {
+    // Its a goddam collection, why would I not be able to iterate
+    // with for of?  Why Edge???
+    for(var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
         button.classList.add(getRandomButtonType());
 
         button.addEventListener('mouseleave', function(event) {

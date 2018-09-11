@@ -1,3 +1,5 @@
+"use strict";
+
 var tabNames = ['web', 'ml', 'fun'];
 var buttonNames = ['web-button', 'ml-button', 'fun-button']
 var linkTypes = ['red-link', 'yellow-link', 'blue-link'];
@@ -97,29 +99,29 @@ function initNav() {
         displayTab('fun');
     }
 
-    for(const button of buttonNames){
-        document.getElementById(button).style.borderBottomStyle = 'solid';
+    for(var i = 0; i < buttonNames.length; i++){
+        document.getElementById(buttonNames[i]).style.borderBottomStyle = 'solid';
     }
 }
 
 function displayTab(tabName) {
     // hide everything
-    for(const tag of tabNames) {
-        var rows = document.getElementsByClassName(tag);
-        for(const row of rows) {
-            row.style.display = 'none';
+    for(var i = 0; i < tabNames.length; i++) {
+        var rows = document.getElementsByClassName(tabNames[i]);
+        for(var j = 0; j < rows.length; j++) {
+            rows[j].style.display = 'none';
         }
     }
 
     // only show the row we want
     var rows = document.getElementsByClassName(tabName);
-    for(const row of rows) {
-        row.style.display = 'block';
+    for(var i = 0; i < rows.length; i++) {
+        rows[i].style.display = 'block';
     }
 
     // set all borders to black
-    for(const button of buttonNames) {
-        document.getElementById(button).style.borderBottomColor = '#373737';
+    for(var i = 0; i < buttonNames.length; i++) {
+        document.getElementById(buttonNames[i]).style.borderBottomColor = '#373737';
     }
 
     // set the selected tab underline color
@@ -150,6 +152,7 @@ window.onload = function() {
         startNavAnimation('fun');
     }
 
+    /*
     var links = document.getElementsByClassName('portfolio-link');
     for(const link of links) {
         link.classList.add(linkTypes[getRandomInt(3)]);
@@ -166,7 +169,7 @@ window.onload = function() {
         link.addEventListener('mouseover', function(event) {
             spreadAnimation(this);
         });
-    }
+    }*/
 
     // start with no tab
     displayTab('none');

@@ -1,4 +1,6 @@
-colors = ['#fc4a1a', '#f7b733', '#4abdac'];
+"use strict";
+
+var colors = ['#fc4a1a', '#f7b733', '#4abdac'];
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));

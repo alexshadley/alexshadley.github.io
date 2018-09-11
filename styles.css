@@ -10,18 +10,27 @@
 html, body {
     height: 100%;
     background-color: #f5f5f5;
+
+    margin: 0;
+    padding: 0;
 }
 
 .button {
     padding: 0px 20px;
     font-size: 40px;
     border-radius: 15px;
-    border: 2.5px solid #373737;
+    border: 2px solid #373737;
     margin-left: 20px;
     margin-right: 20px;
     text-decoration: none;
     color: #373737;
     transition: all 0.4s ease;
+}
+
+.button-div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
 .blue-button:hover {
@@ -40,4 +49,16 @@ html, body {
     color: #fc4a1a;
     border-color: #fc4a1a;
     border-radius: 20px;
+}
+
+.web-nav {
+    background-color: #fff;
+}
+
+.web-nav-item {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0px 0px 10px 10px;
+    color: #373737;
+    text-decoration: none;
 }
