@@ -29,18 +29,6 @@ tr {
     text-decoration: none;
 }
 
-.red-link:hover {
-    color: #fc4a1a;
-}
-
-.yellow-link:hover {
-    color: #f7b733;
-}
-
-.blue-link:hover {
-    color: #4abdac;
-}
-
 .portfolio-title {
     font-size: 100;
     text-align: center;
@@ -50,6 +38,11 @@ tr {
 .portfolio-nav-wrapper {
     text-align: center;
     margin-top: 200px;
+    transition: margin-top 1.0s ease;
+}
+
+.portfolio-nav-wrapper.up {
+    margin-top: 0px;
 }
 
 .portfolio-nav {

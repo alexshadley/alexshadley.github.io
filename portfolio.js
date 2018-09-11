@@ -5,31 +5,14 @@ var buttonNames = ['web-button', 'ml-button', 'fun-button']
 var linkTypes = ['red-link', 'yellow-link', 'blue-link'];
 
 function startNavAnimation(callingTab) {
-    var margin = 200;
-    var velocity = 0.0;
-    var acceleration = .03;
-    var id = setInterval(frame, 3);
-    function frame(){
-        if(margin > 100)
-        {
-            velocity += acceleration;
-        }
-        else
-        {
-            velocity -= acceleration;
-        }
-        
-        margin -= velocity;
-        document.getElementById('nav').style.marginTop = margin;
+    document.getElementById('nav').classList.add('up');
 
-        // exit condition
-        if(velocity < 0.0 || margin <= 0){
-            clearInterval(id);
-            document.getElementById('nav').style.marginTop = 0;
+    document.getElementById('nav').addEventListener("transitionend", function(event) {
+        if(event.propertyName == 'margin-top') {
             initNav();
             displayTab(callingTab);
         }
-    }
+    });
 }
 
 function initNav() {
