@@ -1,0 +1,109 @@
+body {
+    font-family: Consolas,monaco,monospace;
+    font-size: 16pt;
+    display: flex;
+    flex-direction : column;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.tokenizer-parser-title-container {
+  display: flex;
+  flex-direction : row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.textarea-container {
+  margin: 0 50px 0 50px;
+}
+
+.tokenizer-parser-container {
+  margin: 0 50px 0 50px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: space-between;
+  flex-wrap: wrap;
+}
+
+
+.tree-title-container {
+  margin: 0 50px 0 50px;
+}
+
+.ui-div {
+}
+
+.tree-container {
+    text-align: center;
+}
+
+.tree-div {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.text-div {
+    clear: left;
+    border-top: 2px solid black;
+    padding-top: 5px;
+}
+
+.type-checks {
+    background-color: #BEE0EE;
+}
+
+.type-fails {
+    background-color: #FF6754;
+}
+
+.type-partial {
+    background-color: #FFE554;
+}
+
+.error-subterm {
+    /* relative positioning is used here because an eror-details div needs to
+    use absolute positioning based on this element */
+    position: relative;
+    background-color: #FF6754;
+}
+
+.error-subterm:hover .error-details {
+    display: block;
+}
+
+.error-details {
+    position: absolute;
+    bottom: 50px;
+    background-color: #FF6754;
+    display: none;
+}
+
+.summary {
+    text-align: center;
+    font-size: 12pt;
+    margin-top: 60px;
+}
+
+.css-title {
+  font-size: 16pt;
+}
+
+.summary-title {
+    text-align:left;
+    font-size: 16pt;
+}
+
+.expression-builder{
+    font-size: 12pt;
+}
+
+.button-container {
+  text-align: right;
+}
