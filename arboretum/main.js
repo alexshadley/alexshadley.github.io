@@ -5654,12 +5654,6 @@ var author$project$Evaluate$eval = F2(
 			}
 		}
 	});
-var author$project$Tree$Tree = function (a) {
-	return {$: 'Tree', a: a};
-};
-var elm$core$Basics$identity = function (x) {
-	return x;
-};
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5715,6 +5709,17 @@ var elm$core$List$foldr = F3(
 	function (fn, acc, ls) {
 		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
 	});
+var elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
 var elm$core$List$map = F2(
 	function (f, xs) {
 		return A3(
@@ -5729,323 +5734,160 @@ var elm$core$List$map = F2(
 			_List_Nil,
 			xs);
 	});
-var author$project$Render$buildRenderTree = F2(
-	function (_n0, depth) {
-		var tree = _n0.a;
-		var node = {check: tree.node.check, render: depth > 0, term: tree.node.term};
-		var children = elm$core$List$map(
-			function (c) {
-				return A2(author$project$Render$buildRenderTree, c, depth - 1);
-			})(tree.children);
-		return author$project$Tree$Tree(
-			{children: children, node: node});
+var elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
 	});
-var author$project$Main$buildRenderInfo = F4(
-	function (val, tree, depth, id) {
-		return {
-			evaluation: val,
-			id: id,
-			renderTree: A2(author$project$Render$buildRenderTree, tree, depth)
-		};
-	});
-var author$project$Stack$empty = _List_Nil;
-var author$project$Stack$peek = function (stack) {
-	if (!stack.b) {
-		return elm$core$Maybe$Nothing;
-	} else {
-		var x = stack.a;
-		var xs = stack.b;
+var elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
 		return elm$core$Maybe$Just(x);
-	}
-};
-var author$project$Stack$pop = function (stack) {
-	if (!stack.b) {
-		return _List_Nil;
 	} else {
-		var x = stack.a;
-		var xs = stack.b;
-		return xs;
+		return elm$core$Maybe$Nothing;
 	}
 };
-var author$project$Stack$push = F2(
-	function (val, stack) {
-		return _Utils_ap(
-			_List_fromArray(
-				[val]),
-			stack);
+var elm_community$list_extra$List$Extra$getAt = F2(
+	function (idx, xs) {
+		return (idx < 0) ? elm$core$Maybe$Nothing : elm$core$List$head(
+			A2(elm$core$List$drop, idx, xs));
 	});
-var author$project$Typecheck$Checks = function (a) {
-	return {$: 'Checks', a: a};
-};
-var author$project$Typecheck$Invalid = {$: 'Invalid'};
-var author$project$Typecheck$Partial = function (a) {
-	return {$: 'Partial', a: a};
-};
-var author$project$Typecheck$andThen = F2(
-	function (fn, result) {
-		switch (result.$) {
-			case 'Checks':
-				var t1 = result.a;
-				return fn(t1);
-			case 'Partial':
-				var t1 = result.a;
-				var _n1 = fn(t1);
-				if (_n1.$ === 'Checks') {
-					var t2 = _n1.a;
-					return author$project$Typecheck$Partial(t2);
-				} else {
-					return fn(t1);
-				}
-			case 'Fails':
-				var out = result.d;
-				var _n2 = fn(out);
-				if (_n2.$ === 'Checks') {
-					var t2 = _n2.a;
-					return author$project$Typecheck$Partial(t2);
-				} else {
-					return fn(out);
-				}
-			default:
-				return author$project$Typecheck$Invalid;
-		}
-	});
-var author$project$Typecheck$andThen2 = F3(
-	function (fn, res1, res2) {
-		switch (res1.$) {
-			case 'Checks':
-				var t1 = res1.a;
-				return A2(
-					author$project$Typecheck$andThen,
-					fn(t1),
-					res2);
-			case 'Partial':
-				var t1 = res1.a;
-				var _n1 = A2(
-					author$project$Typecheck$andThen,
-					fn(t1),
-					res2);
-				if (_n1.$ === 'Checks') {
-					var t2 = _n1.a;
-					return author$project$Typecheck$Partial(t2);
-				} else {
-					return A2(
-						author$project$Typecheck$andThen,
-						fn(t1),
-						res2);
-				}
-			case 'Fails':
-				var out = res1.d;
-				var _n2 = A2(
-					author$project$Typecheck$andThen,
-					fn(out),
-					res2);
-				if (_n2.$ === 'Checks') {
-					var t2 = _n2.a;
-					return author$project$Typecheck$Partial(t2);
-				} else {
-					return A2(
-						author$project$Typecheck$andThen,
-						fn(out),
-						res2);
-				}
-			default:
-				return author$project$Typecheck$Invalid;
-		}
-	});
-var author$project$Typecheck$andThenTree2 = F4(
-	function (fn, term, tree1, tree2) {
-		var result = function () {
-			var _n0 = _Utils_Tuple2(tree1, tree2);
-			var t1 = _n0.a.a;
-			var t2 = _n0.b.a;
-			return A3(author$project$Typecheck$andThen2, fn, t1.node.check, t2.node.check);
-		}();
-		return author$project$Tree$Tree(
-			{
-				children: _List_fromArray(
-					[tree1, tree2]),
-				node: {check: result, term: term}
-			});
-	});
-var author$project$Typecheck$Fails = F4(
-	function (a, b, c, d) {
-		return {$: 'Fails', a: a, b: b, c: c, d: d};
-	});
-var author$project$Typecheck$checkBinOp = F4(
-	function (env, op, t1, t2) {
-		var resultType = function () {
-			switch (op.$) {
-				case 'Plus':
-					return author$project$Types$TInt;
-				case 'Minus':
-					return author$project$Types$TInt;
-				case 'Times':
-					return author$project$Types$TInt;
-				case 'Div':
-					return author$project$Types$TInt;
-				case 'Mod':
-					return author$project$Types$TInt;
-				case 'Eq':
-					return author$project$Types$TBool;
-				case 'And':
-					return author$project$Types$TBool;
-				default:
-					return author$project$Types$TBool;
-			}
-		}();
-		var operandType = function () {
-			switch (op.$) {
-				case 'Plus':
-					return author$project$Types$TInt;
-				case 'Minus':
-					return author$project$Types$TInt;
-				case 'Times':
-					return author$project$Types$TInt;
-				case 'Div':
-					return author$project$Types$TInt;
-				case 'Mod':
-					return author$project$Types$TInt;
-				case 'Eq':
-					return author$project$Types$TInt;
-				case 'And':
-					return author$project$Types$TBool;
-				default:
-					return author$project$Types$TBool;
-			}
-		}();
-		return _Utils_eq(t1, operandType) ? (_Utils_eq(t2, operandType) ? author$project$Typecheck$Checks(resultType) : A4(author$project$Typecheck$Fails, 2, operandType, t2, resultType)) : A4(author$project$Typecheck$Fails, 1, operandType, t1, resultType);
-	});
-var author$project$Typecheck$getCheck = function (tree) {
-	var t = tree.a;
-	return t.node.check;
-};
-var author$project$Typecheck$singletonTree = F2(
-	function (term, result) {
-		return author$project$Tree$Tree(
-			{
-				children: _List_Nil,
-				node: {check: result, term: term}
-			});
+var author$project$Typecheck$lookup = F2(
+	function (name, xs) {
+		return A2(
+			elm_community$list_extra$List$Extra$getAt,
+			0,
+			A2(
+				elm$core$List$map,
+				function (_n1) {
+					var val = _n1.b;
+					return val;
+				},
+				A2(
+					elm$core$List$filter,
+					function (_n0) {
+						var key = _n0.a;
+						return _Utils_eq(key, name);
+					},
+					xs)));
 	});
 var author$project$Types$TTuple = F2(
 	function (a, b) {
 		return {$: 'TTuple', a: a, b: b};
 	});
-var author$project$Typecheck$typecheck = F3(
-	function (env, argStack, t) {
-		switch (t.$) {
-			case 'CTerm':
-				var c = t.a;
-				if (c.$ === 'CInt') {
-					return A2(
-						author$project$Typecheck$singletonTree,
-						t,
-						author$project$Typecheck$Checks(author$project$Types$TInt));
-				} else {
-					return A2(
-						author$project$Typecheck$singletonTree,
-						t,
-						author$project$Typecheck$Checks(author$project$Types$TBool));
-				}
-			case 'BinTerm':
-				var op = t.a;
-				var t1 = t.b;
-				var t2 = t.c;
-				var type2 = A3(author$project$Typecheck$typecheck, env, argStack, t2);
-				var type1 = A3(author$project$Typecheck$typecheck, env, argStack, t1);
-				return A4(
-					author$project$Typecheck$andThenTree2,
-					F2(
-						function (ty1, ty2) {
-							return A4(author$project$Typecheck$checkBinOp, env, op, ty1, ty2);
-						}),
-					t,
-					type1,
-					type2);
-			case 'VTerm':
-				var v = t.a;
-				var _n2 = A2(elm$core$Dict$get, v, env);
-				if (_n2.$ === 'Just') {
-					var sub = _n2.a;
-					return A2(author$project$Typecheck$singletonTree, t, sub);
-				} else {
-					return A2(author$project$Typecheck$singletonTree, t, author$project$Typecheck$Invalid);
-				}
-			case 'Lam':
-				var name = t.a;
-				var body = t.b;
-				var argTree = function () {
-					var _n3 = author$project$Stack$peek(argStack);
-					if (_n3.$ === 'Just') {
-						var sub = _n3.a;
-						return sub;
+var author$project$Typecheck$apply = F2(
+	function (subst, ty) {
+		apply:
+		while (true) {
+			switch (ty.$) {
+				case 'TVar':
+					var name = ty.a;
+					var _n1 = A2(author$project$Typecheck$lookup, name, subst);
+					if (_n1.$ === 'Just') {
+						var s = _n1.a;
+						var $temp$subst = subst,
+							$temp$ty = s;
+						subst = $temp$subst;
+						ty = $temp$ty;
+						continue apply;
 					} else {
-						return A2(
-							author$project$Typecheck$singletonTree,
-							author$project$Types$VTerm(name),
-							author$project$Typecheck$Invalid);
+						return ty;
 					}
-				}();
-				var outTree = A3(
-					author$project$Typecheck$typecheck,
-					A3(
-						elm$core$Dict$insert,
-						name,
-						author$project$Typecheck$getCheck(argTree),
-						env),
-					author$project$Stack$pop(argStack),
-					body);
-				return A4(
-					author$project$Typecheck$andThenTree2,
-					F2(
-						function (a, o) {
-							return author$project$Typecheck$Checks(
-								A2(author$project$Types$TFun, a, o));
-						}),
-					t,
-					argTree,
-					outTree);
-			case 'App':
-				var fn = t.a;
-				var arg = t.b;
-				var argTree = A3(author$project$Typecheck$typecheck, env, argStack, arg);
-				var fnTree = A3(
-					author$project$Typecheck$typecheck,
-					env,
-					A2(author$project$Stack$push, argTree, argStack),
-					fn);
-				return A4(
-					author$project$Typecheck$andThenTree2,
-					F2(
-						function (ft, at) {
-							if (ft.$ === 'TFun') {
-								var it = ft.a;
-								var ot = ft.b;
-								return author$project$Typecheck$Checks(ot);
-							} else {
-								return author$project$Typecheck$Invalid;
-							}
-						}),
-					t,
-					fnTree,
-					argTree);
-			case 'Tuple':
-				var t1 = t.a;
-				var t2 = t.b;
-				return A4(
-					author$project$Typecheck$andThenTree2,
-					F2(
-						function (c1, c2) {
-							return author$project$Typecheck$Checks(
-								A2(author$project$Types$TTuple, c1, c2));
-						}),
-					t,
-					A3(author$project$Typecheck$typecheck, env, argStack, t1),
-					A3(author$project$Typecheck$typecheck, env, argStack, t2));
-			default:
-				return A2(author$project$Typecheck$singletonTree, t, author$project$Typecheck$Invalid);
+				case 'TInt':
+					return author$project$Types$TInt;
+				case 'TBool':
+					return author$project$Types$TBool;
+				case 'TFun':
+					var x = ty.a;
+					var y = ty.b;
+					return A2(
+						author$project$Types$TFun,
+						A2(author$project$Typecheck$apply, subst, x),
+						A2(author$project$Typecheck$apply, subst, y));
+				default:
+					var x = ty.a;
+					var y = ty.b;
+					return A2(
+						author$project$Types$TTuple,
+						A2(author$project$Typecheck$apply, subst, x),
+						A2(author$project$Typecheck$apply, subst, y));
+			}
 		}
 	});
+var author$project$Typecheck$indexedFoldl = F3(
+	function (fn, first, xs) {
+		return A3(
+			elm$core$List$foldl,
+			F2(
+				function (val, _n0) {
+					var acc = _n0.a;
+					var i = _n0.b;
+					return _Utils_Tuple2(
+						A3(fn, i, val, acc),
+						i + 1);
+				}),
+			_Utils_Tuple2(first, 0),
+			xs).a;
+	});
+var author$project$Types$TVar = function (a) {
+	return {$: 'TVar', a: a};
+};
+var author$project$Typecheck$renameTVars = F2(
+	function (n, ty) {
+		switch (ty.$) {
+			case 'TInt':
+				return author$project$Types$TInt;
+			case 'TBool':
+				return author$project$Types$TBool;
+			case 'TVar':
+				var name = ty.a;
+				return author$project$Types$TVar(
+					name + ('.' + elm$core$String$fromInt(n)));
+			case 'TFun':
+				var ty1 = ty.a;
+				var ty2 = ty.b;
+				return A2(
+					author$project$Types$TFun,
+					A2(author$project$Typecheck$renameTVars, n, ty1),
+					A2(author$project$Typecheck$renameTVars, n, ty2));
+			default:
+				var ty1 = ty.a;
+				var ty2 = ty.b;
+				return A2(
+					author$project$Types$TTuple,
+					A2(author$project$Typecheck$renameTVars, n, ty1),
+					A2(author$project$Typecheck$renameTVars, n, ty2));
+		}
+	});
+var author$project$Typecheck$tvarNames = A2(
+	elm$core$List$map,
+	function (n) {
+		return 't' + n;
+	},
+	A2(
+		elm$core$List$map,
+		elm$core$String$fromInt,
+		A2(elm$core$List$range, 1, 1000)));
+var author$project$Tree$Tree = function (a) {
+	return {$: 'Tree', a: a};
+};
 var elm$core$Dict$map = F2(
 	function (func, dict) {
 		if (dict.$ === 'RBEmpty_elm_builtin') {
@@ -6065,38 +5907,609 @@ var elm$core$Dict$map = F2(
 				A2(elm$core$Dict$map, func, right));
 		}
 	});
-var author$project$Main$buildAllRenderInfos = F3(
-	function (terms, annotations, checks) {
-		var pairs = A2(
-			elm$core$List$map,
-			function (_n1) {
-				var snd = _n1.b;
-				return snd;
-			},
-			elm$core$Dict$toList(
-				A2(
-					elm$core$Dict$map,
-					F2(
-						function (key, term) {
-							return _Utils_Tuple2(
-								term,
-								A3(author$project$Typecheck$typecheck, checks, author$project$Stack$empty, term));
-						}),
-					terms)));
+var author$project$Typecheck$applyEnv = F2(
+	function (subst, env) {
 		return A2(
-			elm$core$List$indexedMap,
+			elm$core$Dict$map,
 			F2(
-				function (i, _n0) {
-					var term = _n0.a;
-					var checkTree = _n0.b;
-					return A4(
-						author$project$Main$buildRenderInfo,
-						A2(author$project$Evaluate$eval, terms, term),
-						checkTree,
-						3,
-						i);
+				function (_n0, ty) {
+					return A2(author$project$Typecheck$apply, subst, ty);
 				}),
-			pairs);
+			env);
+	});
+var author$project$Typecheck$getNext = function (names) {
+	if (!names.b) {
+		return _Utils_Tuple2('OUT OF NAMES', _List_Nil);
+	} else {
+		var x = names.a;
+		var xs = names.b;
+		return _Utils_Tuple2(x, xs);
+	}
+};
+var author$project$Typecheck$getOpType = function (op) {
+	switch (op.$) {
+		case 'Plus':
+			return author$project$Types$TInt;
+		case 'Minus':
+			return author$project$Types$TInt;
+		case 'Times':
+			return author$project$Types$TInt;
+		case 'Div':
+			return author$project$Types$TInt;
+		case 'Mod':
+			return author$project$Types$TInt;
+		case 'Eq':
+			return author$project$Types$TInt;
+		case 'And':
+			return author$project$Types$TBool;
+		default:
+			return author$project$Types$TBool;
+	}
+};
+var author$project$Typecheck$getResultType = function (op) {
+	switch (op.$) {
+		case 'Plus':
+			return author$project$Types$TInt;
+		case 'Minus':
+			return author$project$Types$TInt;
+		case 'Times':
+			return author$project$Types$TInt;
+		case 'Div':
+			return author$project$Types$TInt;
+		case 'Mod':
+			return author$project$Types$TInt;
+		case 'Eq':
+			return author$project$Types$TBool;
+		case 'And':
+			return author$project$Types$TBool;
+		default:
+			return author$project$Types$TBool;
+	}
+};
+var author$project$Typecheck$getSubs = function (_n0) {
+	var t = _n0.a;
+	return t.node.subs;
+};
+var author$project$Typecheck$split = function (vals) {
+	if (!vals.b) {
+		return _Utils_Tuple2(_List_Nil, _List_Nil);
+	} else {
+		if (!vals.b.b) {
+			var x = vals.a;
+			return _Utils_Tuple2(
+				_List_fromArray(
+					[x]),
+				_List_Nil);
+		} else {
+			var x = vals.a;
+			var _n1 = vals.b;
+			var y = _n1.a;
+			var zs = _n1.b;
+			var _n2 = author$project$Typecheck$split(zs);
+			var xs = _n2.a;
+			var ys = _n2.b;
+			return _Utils_Tuple2(
+				_Utils_ap(
+					_List_fromArray(
+						[x]),
+					xs),
+				_Utils_ap(
+					_List_fromArray(
+						[y]),
+					ys));
+		}
+	}
+};
+var elm$core$Basics$identity = function (x) {
+	return x;
+};
+var elm$core$Set$Set_elm_builtin = function (a) {
+	return {$: 'Set_elm_builtin', a: a};
+};
+var elm$core$Set$empty = elm$core$Set$Set_elm_builtin(elm$core$Dict$empty);
+var elm$core$Set$insert = F2(
+	function (key, _n0) {
+		var dict = _n0.a;
+		return elm$core$Set$Set_elm_builtin(
+			A3(elm$core$Dict$insert, key, _Utils_Tuple0, dict));
+	});
+var elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _n0 = A2(elm$core$Dict$get, key, dict);
+		if (_n0.$ === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var elm$core$Set$member = F2(
+	function (key, _n0) {
+		var dict = _n0.a;
+		return A2(elm$core$Dict$member, key, dict);
+	});
+var elm_community$list_extra$List$Extra$uniqueHelp = F4(
+	function (f, existing, remaining, accumulator) {
+		uniqueHelp:
+		while (true) {
+			if (!remaining.b) {
+				return elm$core$List$reverse(accumulator);
+			} else {
+				var first = remaining.a;
+				var rest = remaining.b;
+				var computedFirst = f(first);
+				if (A2(elm$core$Set$member, computedFirst, existing)) {
+					var $temp$f = f,
+						$temp$existing = existing,
+						$temp$remaining = rest,
+						$temp$accumulator = accumulator;
+					f = $temp$f;
+					existing = $temp$existing;
+					remaining = $temp$remaining;
+					accumulator = $temp$accumulator;
+					continue uniqueHelp;
+				} else {
+					var $temp$f = f,
+						$temp$existing = A2(elm$core$Set$insert, computedFirst, existing),
+						$temp$remaining = rest,
+						$temp$accumulator = A2(elm$core$List$cons, first, accumulator);
+					f = $temp$f;
+					existing = $temp$existing;
+					remaining = $temp$remaining;
+					accumulator = $temp$accumulator;
+					continue uniqueHelp;
+				}
+			}
+		}
+	});
+var elm_community$list_extra$List$Extra$unique = function (list) {
+	return A4(elm_community$list_extra$List$Extra$uniqueHelp, elm$core$Basics$identity, elm$core$Set$empty, list, _List_Nil);
+};
+var author$project$Typecheck$tvs = function (ty) {
+	switch (ty.$) {
+		case 'TVar':
+			var name = ty.a;
+			return _List_fromArray(
+				[name]);
+		case 'TBool':
+			return _List_Nil;
+		case 'TInt':
+			return _List_Nil;
+		case 'TFun':
+			var x = ty.a;
+			var y = ty.b;
+			return elm_community$list_extra$List$Extra$unique(
+				_Utils_ap(
+					author$project$Typecheck$tvs(x),
+					author$project$Typecheck$tvs(y)));
+		default:
+			var x = ty.a;
+			var y = ty.b;
+			return elm_community$list_extra$List$Extra$unique(
+				_Utils_ap(
+					author$project$Typecheck$tvs(x),
+					author$project$Typecheck$tvs(y)));
+	}
+};
+var elm$core$Basics$not = _Basics_not;
+var elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
+var elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (maybeValue.$ === 'Just') {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return elm$core$Maybe$Nothing;
+		}
+	});
+var author$project$Typecheck$unify = F2(
+	function (ty1, ty2) {
+		var _n0 = _Utils_Tuple2(ty1, ty2);
+		_n0$2:
+		while (true) {
+			_n0$7:
+			while (true) {
+				switch (_n0.a.$) {
+					case 'TVar':
+						if (_n0.b.$ === 'TVar') {
+							var v = _n0.a.a;
+							var w = _n0.b.a;
+							return _Utils_eq(v, w) ? elm$core$Maybe$Just(_List_Nil) : elm$core$Maybe$Just(
+								_List_fromArray(
+									[
+										_Utils_Tuple2(v, ty2)
+									]));
+						} else {
+							var v = _n0.a.a;
+							return (!A2(
+								elm$core$List$member,
+								v,
+								author$project$Typecheck$tvs(ty2))) ? elm$core$Maybe$Just(
+								_List_fromArray(
+									[
+										_Utils_Tuple2(v, ty2)
+									])) : elm$core$Maybe$Nothing;
+						}
+					case 'TInt':
+						switch (_n0.b.$) {
+							case 'TVar':
+								break _n0$2;
+							case 'TInt':
+								var _n1 = _n0.a;
+								var _n2 = _n0.b;
+								return elm$core$Maybe$Just(_List_Nil);
+							default:
+								break _n0$7;
+						}
+					case 'TBool':
+						switch (_n0.b.$) {
+							case 'TVar':
+								break _n0$2;
+							case 'TBool':
+								var _n3 = _n0.a;
+								var _n4 = _n0.b;
+								return elm$core$Maybe$Just(_List_Nil);
+							default:
+								break _n0$7;
+						}
+					case 'TFun':
+						switch (_n0.b.$) {
+							case 'TVar':
+								break _n0$2;
+							case 'TFun':
+								var _n5 = _n0.a;
+								var x1 = _n5.a;
+								var y1 = _n5.b;
+								var _n6 = _n0.b;
+								var x2 = _n6.a;
+								var y2 = _n6.b;
+								return A4(author$project$Typecheck$unifyBin, x1, y1, x2, y2);
+							default:
+								break _n0$7;
+						}
+					default:
+						switch (_n0.b.$) {
+							case 'TVar':
+								break _n0$2;
+							case 'TTuple':
+								var _n7 = _n0.a;
+								var x1 = _n7.a;
+								var y1 = _n7.b;
+								var _n8 = _n0.b;
+								var x2 = _n8.a;
+								var y2 = _n8.b;
+								return A4(author$project$Typecheck$unifyBin, x1, y1, x2, y2);
+							default:
+								break _n0$7;
+						}
+				}
+			}
+			return elm$core$Maybe$Nothing;
+		}
+		var w = _n0.b.a;
+		return (!A2(
+			elm$core$List$member,
+			w,
+			author$project$Typecheck$tvs(ty1))) ? elm$core$Maybe$Just(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(w, ty1)
+				])) : elm$core$Maybe$Nothing;
+	});
+var author$project$Typecheck$unifyBin = F4(
+	function (x1, y1, x2, y2) {
+		return A2(
+			elm$core$Maybe$andThen,
+			function (subX) {
+				return A2(
+					elm$core$Maybe$andThen,
+					function (subY) {
+						return elm$core$Maybe$Just(
+							_Utils_ap(subX, subY));
+					},
+					A2(
+						author$project$Typecheck$unify,
+						A2(author$project$Typecheck$apply, subX, y1),
+						A2(author$project$Typecheck$apply, subX, y2)));
+			},
+			A2(author$project$Typecheck$unify, x1, x2));
+	});
+var author$project$Typecheck$typecheck = F4(
+	function (env, term, ty, names) {
+		var _n0 = function () {
+			switch (term.$) {
+				case 'CTerm':
+					var c = term.a;
+					if (c.$ === 'CInt') {
+						return _Utils_Tuple2(
+							A2(author$project$Typecheck$unify, ty, author$project$Types$TInt),
+							_List_Nil);
+					} else {
+						return _Utils_Tuple2(
+							A2(author$project$Typecheck$unify, ty, author$project$Types$TBool),
+							_List_Nil);
+					}
+				case 'BinTerm':
+					var op = term.a;
+					var t1 = term.b;
+					var t2 = term.c;
+					var resType = author$project$Typecheck$getResultType(op);
+					var opType = author$project$Typecheck$getOpType(op);
+					var _n3 = A2(author$project$Typecheck$unify, ty, resType);
+					if (_n3.$ === 'Just') {
+						var sub = _n3.a;
+						var rightTree = A4(author$project$Typecheck$typecheck, env, t2, opType, names);
+						var leftTree = A4(author$project$Typecheck$typecheck, env, t1, opType, names);
+						var _n4 = _Utils_Tuple2(
+							author$project$Typecheck$getSubs(leftTree),
+							author$project$Typecheck$getSubs(rightTree));
+						if ((_n4.a.$ === 'Just') && (_n4.b.$ === 'Just')) {
+							var ls = _n4.a.a;
+							var rs = _n4.b.a;
+							return _Utils_Tuple2(
+								elm$core$Maybe$Just(
+									_Utils_ap(
+										sub,
+										_Utils_ap(ls, rs))),
+								_List_fromArray(
+									[leftTree, rightTree]));
+						} else {
+							return _Utils_Tuple2(
+								elm$core$Maybe$Nothing,
+								_List_fromArray(
+									[leftTree, rightTree]));
+						}
+					} else {
+						return _Utils_Tuple2(elm$core$Maybe$Nothing, _List_Nil);
+					}
+				case 'VTerm':
+					var v = term.a;
+					var _n5 = A2(elm$core$Dict$get, v, env);
+					if (_n5.$ === 'Just') {
+						var vType = _n5.a;
+						return _Utils_Tuple2(
+							A2(author$project$Typecheck$unify, ty, vType),
+							_List_Nil);
+					} else {
+						return _Utils_Tuple2(elm$core$Maybe$Nothing, _List_Nil);
+					}
+				case 'Lam':
+					var argName = term.a;
+					var body = term.b;
+					var _n6 = author$project$Typecheck$getNext(names);
+					var argVarName = _n6.a;
+					var remainder = _n6.b;
+					var argVar = author$project$Types$TVar(argVarName);
+					var _n7 = author$project$Typecheck$getNext(remainder);
+					var bodyName = _n7.a;
+					var remainder2 = _n7.b;
+					var bodyVar = author$project$Types$TVar(bodyName);
+					var _n8 = A2(
+						author$project$Typecheck$unify,
+						ty,
+						A2(author$project$Types$TFun, argVar, bodyVar));
+					if (_n8.$ === 'Just') {
+						var sub = _n8.a;
+						var fnTree = A4(
+							author$project$Typecheck$typecheck,
+							A2(
+								author$project$Typecheck$applyEnv,
+								sub,
+								A3(elm$core$Dict$insert, argName, argVar, env)),
+							body,
+							A2(author$project$Typecheck$apply, sub, bodyVar),
+							remainder2);
+						return _Utils_Tuple2(
+							A2(
+								elm$core$Maybe$andThen,
+								function (fnSubs) {
+									return elm$core$Maybe$Just(
+										_Utils_ap(sub, fnSubs));
+								},
+								author$project$Typecheck$getSubs(fnTree)),
+							_List_fromArray(
+								[fnTree]));
+					} else {
+						return _Utils_Tuple2(elm$core$Maybe$Nothing, _List_Nil);
+					}
+				case 'App':
+					var fn = term.a;
+					var arg = term.b;
+					var _n9 = author$project$Typecheck$split(names);
+					var fnNames = _n9.a;
+					var argNames = _n9.b;
+					var _n10 = author$project$Typecheck$getNext(fnNames);
+					var inName = _n10.a;
+					var fnRemainder = _n10.b;
+					var inVar = author$project$Types$TVar(inName);
+					var fnTree = A4(
+						author$project$Typecheck$typecheck,
+						env,
+						fn,
+						A2(author$project$Types$TFun, inVar, ty),
+						fnRemainder);
+					var argTree = A2(
+						elm$core$Maybe$andThen,
+						function (sub) {
+							return elm$core$Maybe$Just(
+								A4(
+									author$project$Typecheck$typecheck,
+									A2(author$project$Typecheck$applyEnv, sub, env),
+									arg,
+									A2(author$project$Typecheck$apply, sub, inVar),
+									argNames));
+						},
+						author$project$Typecheck$getSubs(fnTree));
+					var appSubs = function () {
+						var _n12 = _Utils_Tuple2(
+							author$project$Typecheck$getSubs(fnTree),
+							A2(elm$core$Maybe$andThen, author$project$Typecheck$getSubs, argTree));
+						if ((_n12.a.$ === 'Just') && (_n12.b.$ === 'Just')) {
+							var fnSubs = _n12.a.a;
+							var argSubs = _n12.b.a;
+							return elm$core$Maybe$Just(
+								_Utils_ap(fnSubs, argSubs));
+						} else {
+							return elm$core$Maybe$Nothing;
+						}
+					}();
+					var trees = function () {
+						if (argTree.$ === 'Just') {
+							var t = argTree.a;
+							return _List_fromArray(
+								[fnTree, t]);
+						} else {
+							return _List_fromArray(
+								[fnTree]);
+						}
+					}();
+					return _Utils_Tuple2(appSubs, trees);
+				default:
+					return _Utils_Tuple2(elm$core$Maybe$Nothing, _List_Nil);
+			}
+		}();
+		var subs = _n0.a;
+		var childTrees = _n0.b;
+		return author$project$Tree$Tree(
+			{
+				children: childTrees,
+				node: {env: env, inType: ty, subs: subs, term: term}
+			});
+	});
+var elm$core$Tuple$second = function (_n0) {
+	var y = _n0.b;
+	return y;
+};
+var author$project$Typecheck$typecheckAll = function (ts) {
+	return A3(
+		author$project$Typecheck$indexedFoldl,
+		F3(
+			function (i, _n0, _n1) {
+				var varName = _n0.a;
+				var term = _n0.b;
+				var env = _n1.a;
+				var trees = _n1.b;
+				var tree = A4(
+					author$project$Typecheck$typecheck,
+					env,
+					term,
+					author$project$Types$TVar('t0'),
+					author$project$Typecheck$tvarNames);
+				var ty = function () {
+					var t = tree.a;
+					return A2(
+						elm$core$Maybe$andThen,
+						function (s) {
+							return elm$core$Maybe$Just(
+								A2(
+									author$project$Typecheck$renameTVars,
+									i,
+									A2(
+										author$project$Typecheck$apply,
+										s,
+										author$project$Types$TVar('t0'))));
+						},
+						t.node.subs);
+				}();
+				if (ty.$ === 'Just') {
+					var valid = ty.a;
+					return _Utils_Tuple2(
+						A3(elm$core$Dict$insert, varName, valid, env),
+						_Utils_ap(
+							trees,
+							_List_fromArray(
+								[tree])));
+				} else {
+					return _Utils_Tuple2(
+						env,
+						_Utils_ap(
+							trees,
+							_List_fromArray(
+								[tree])));
+				}
+			}),
+		_Utils_Tuple2(elm$core$Dict$empty, _List_Nil),
+		ts).b;
+};
+var elm$core$List$map3 = _List_map3;
+var author$project$Main$buildAllRenderInfos = F2(
+	function (terms, infos) {
+		var termEnv = A3(
+			elm$core$List$foldl,
+			F2(
+				function (_n3, env) {
+					var name = _n3.a;
+					var term = _n3.b;
+					return A3(elm$core$Dict$insert, name, term, env);
+				}),
+			elm$core$Dict$empty,
+			terms);
+		var vals = A2(
+			elm$core$List$map,
+			function (_n2) {
+				var name = _n2.a;
+				var term = _n2.b;
+				return A2(author$project$Evaluate$eval, termEnv, term);
+			},
+			terms);
+		var findInfo = F2(
+			function (name, is) {
+				return elm$core$List$head(
+					A2(
+						elm$core$List$filter,
+						function (i) {
+							return _Utils_eq(i.name, name);
+						},
+						is));
+			});
+		var checks = author$project$Typecheck$typecheckAll(terms);
+		return A4(
+			elm$core$List$map3,
+			F3(
+				function (_n0, val, check) {
+					var name = _n0.a;
+					var term = _n0.b;
+					var _n1 = A2(findInfo, name, infos);
+					if (_n1.$ === 'Just') {
+						var info = _n1.a;
+						return _Utils_update(
+							info,
+							{evaluation: val, term: term, typecheck: check});
+					} else {
+						return {depth: 3, evaluation: val, name: name, term: term, typecheck: check};
+					}
+				}),
+			terms,
+			vals,
+			checks);
 	});
 var elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
@@ -6116,22 +6529,6 @@ var elm$core$List$filterMap = F2(
 			_List_Nil,
 			xs);
 	});
-var author$project$Main$filterAnnotations = function (xs) {
-	return A2(
-		elm$core$List$filterMap,
-		function (_n0) {
-			var n = _n0.a;
-			var x = _n0.b;
-			if (x.$ === 'Right') {
-				var l = x.a;
-				return elm$core$Maybe$Just(
-					_Utils_Tuple2(n, l));
-			} else {
-				return elm$core$Maybe$Nothing;
-			}
-		},
-		xs);
-};
 var author$project$Main$filterTerms = function (xs) {
 	return A2(
 		elm$core$List$filterMap,
@@ -6148,6 +6545,15 @@ var author$project$Main$filterTerms = function (xs) {
 		},
 		xs);
 };
+var author$project$Main$filterUpdate = F3(
+	function (cond, upd, xs) {
+		return A2(
+			elm$core$List$map,
+			function (x) {
+				return cond(x) ? upd(x) : x;
+			},
+			xs);
+	});
 var elm$json$Json$Encode$list = F2(
 	function (func, entries) {
 		return _Json_wrap(
@@ -6161,35 +6567,6 @@ var elm$json$Json$Encode$string = _Json_wrap;
 var author$project$Main$parseLines = _Platform_outgoingPort(
 	'parseLines',
 	elm$json$Json$Encode$list(elm$json$Json$Encode$string));
-var author$project$Typecheck$typecheckAll = function (ts) {
-	return A3(
-		elm$core$List$foldl,
-		F2(
-			function (_n0, env) {
-				var name = _n0.a;
-				var term = _n0.b;
-				return A3(
-					elm$core$Dict$insert,
-					name,
-					author$project$Typecheck$getCheck(
-						A3(author$project$Typecheck$typecheck, env, author$project$Stack$empty, term)),
-					env);
-			}),
-		elm$core$Dict$empty,
-		ts);
-};
-var elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		elm$core$List$foldl,
-		F2(
-			function (_n0, dict) {
-				var key = _n0.a;
-				var value = _n0.b;
-				return A3(elm$core$Dict$insert, key, value, dict);
-			}),
-		elm$core$Dict$empty,
-		assocs);
-};
 var author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6202,26 +6579,53 @@ var author$project$Main$update = F2(
 						{content: newContent}),
 					author$project$Main$parseLines(lines));
 			case 'IncDepth':
-				var id = msg.a;
-				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+				var name = msg.a;
+				var infos = A3(
+					author$project$Main$filterUpdate,
+					function (i) {
+						return _Utils_eq(i.name, name);
+					},
+					function (i) {
+						return _Utils_update(
+							i,
+							{depth: i.depth + 1});
+					},
+					model.renderInfos);
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{renderInfos: infos}),
+					elm$core$Platform$Cmd$none);
 			case 'DecDepth':
-				var id = msg.a;
-				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+				var name = msg.a;
+				var infos = A3(
+					author$project$Main$filterUpdate,
+					function (i) {
+						return _Utils_eq(i.name, name);
+					},
+					function (i) {
+						return _Utils_update(
+							i,
+							{depth: i.depth - 1});
+					},
+					model.renderInfos);
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{renderInfos: infos}),
+					elm$core$Platform$Cmd$none);
 			default:
 				var r = msg.a;
 				if (r.$ === 'Ok') {
 					var ts = r.a;
-					var terms = elm$core$Dict$fromList(
-						author$project$Main$filterTerms(ts));
-					var checks = author$project$Typecheck$typecheckAll(
-						author$project$Main$filterTerms(ts));
-					var annotations = elm$core$Dict$fromList(
-						author$project$Main$filterAnnotations(ts));
-					var renderInfos = A3(author$project$Main$buildAllRenderInfos, terms, annotations, checks);
+					var renderInfos = A2(
+						author$project$Main$buildAllRenderInfos,
+						author$project$Main$filterTerms(ts),
+						model.renderInfos);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{checks: checks, renderInfos: renderInfos, terms: terms}),
+							{renderInfos: renderInfos}),
 						elm$core$Platform$Cmd$none);
 				} else {
 					var e = r.a;
@@ -6328,6 +6732,52 @@ var author$project$Evaluate$valToString = function (v) {
 		return 'Undefined';
 	}
 };
+var author$project$Typecheck$finalType = function (_n0) {
+	var tree = _n0.a;
+	return A2(
+		elm$core$Maybe$andThen,
+		function (s) {
+			return elm$core$Maybe$Just(
+				A2(
+					author$project$Typecheck$apply,
+					s,
+					author$project$Types$TVar('t0')));
+		},
+		tree.node.subs);
+};
+var author$project$Typecheck$typeToString = function (t) {
+	switch (t.$) {
+		case 'TBool':
+			return 'Bool';
+		case 'TInt':
+			return 'Int';
+		case 'TVar':
+			var name = t.a;
+			return name;
+		case 'TTuple':
+			var a = t.a;
+			var b = t.b;
+			return 'Tuple' + (' ' + (author$project$Typecheck$typeToString(a) + (' ' + author$project$Typecheck$typeToString(b))));
+		default:
+			var a = t.a;
+			var b = t.b;
+			return author$project$Typecheck$typeToString(a) + (' -> ' + author$project$Typecheck$typeToString(b));
+	}
+};
+var author$project$Typecheck$tsubstToString = function (subst) {
+	return A3(
+		elm$core$List$foldr,
+		elm$core$Basics$append,
+		'',
+		A2(
+			elm$core$List$map,
+			function (_n0) {
+				var name = _n0.a;
+				var sub = _n0.b;
+				return '(' + (name + (': ' + (author$project$Typecheck$typeToString(sub) + ') ')));
+			},
+			subst));
+};
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
@@ -6341,6 +6791,7 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
+var elm$html$Html$br = _VirtualDom_node('br');
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
@@ -6353,7 +6804,27 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
-var author$project$Main$renderSummary = function (val) {
+var author$project$Main$renderSummary = function (info) {
+	var typeString = function () {
+		var _n2 = author$project$Typecheck$finalType(info.typecheck);
+		if (_n2.$ === 'Just') {
+			var t = _n2.a;
+			return author$project$Typecheck$typeToString(t);
+		} else {
+			return 'Error';
+		}
+	}();
+	var substString = function () {
+		var _n0 = info.typecheck;
+		var t = _n0.a;
+		var _n1 = t.node.subs;
+		if (_n1.$ === 'Just') {
+			var s = _n1.a;
+			return author$project$Typecheck$tsubstToString(s);
+		} else {
+			return 'Error';
+		}
+	}();
 	return A2(
 		elm$html$Html$div,
 		_List_fromArray(
@@ -6373,344 +6844,71 @@ var author$project$Main$renderSummary = function (val) {
 						elm$html$Html$text('Summary:')
 					])),
 				elm$html$Html$text(
-				'Evaluation result: ' + author$project$Evaluate$valToString(val))
+				'Evaluation result: ' + author$project$Evaluate$valToString(info.evaluation)),
+				A2(elm$html$Html$br, _List_Nil, _List_Nil),
+				elm$html$Html$text('Typecheck: ' + typeString),
+				A2(elm$html$Html$br, _List_Nil, _List_Nil),
+				elm$html$Html$text('Substitutions: ' + substString)
 			]));
 };
-var author$project$Render$listSubterms = function (t) {
-	switch (t.$) {
-		case 'CTerm':
-			return _List_Nil;
-		case 'VTerm':
-			return _List_Nil;
-		case 'BinTerm':
-			var x = t.b;
-			var y = t.c;
-			return _List_fromArray(
-				[x, y]);
-		case 'Lam':
-			var x = t.a;
-			var y = t.b;
-			return _List_fromArray(
-				[
-					author$project$Types$VTerm('\\' + x),
-					y
-				]);
-		case 'App':
-			var x = t.a;
-			var y = t.b;
-			return _List_fromArray(
-				[x, y]);
-		case 'Tuple':
-			var x = t.a;
-			var y = t.b;
-			return _List_fromArray(
-				[x, y]);
-		default:
-			return _List_Nil;
-	}
-};
-var author$project$Render$intersperse = F2(
-	function (i, xs) {
-		if (!xs.b) {
-			return _List_Nil;
-		} else {
-			if (!xs.b.b) {
-				var x = xs.a;
-				return _List_fromArray(
-					[i, x]);
+var author$project$Render$renderCallTreeRec = F3(
+	function (_n0, subs, depth) {
+		var tree = _n0.a;
+		var typeString = function () {
+			var _n1 = tree.node.subs;
+			if (_n1.$ === 'Just') {
+				return author$project$Typecheck$typeToString(
+					A2(author$project$Typecheck$apply, subs, tree.node.inType));
 			} else {
-				var x = xs.a;
-				var rem = xs.b;
-				return _Utils_ap(
-					_List_fromArray(
-						[i, x]),
-					A2(author$project$Render$intersperse, i, rem));
-			}
-		}
-	});
-var author$project$Typecheck$typeToString = function (t) {
-	switch (t.$) {
-		case 'TBool':
-			return 'Bool';
-		case 'TInt':
-			return 'Int';
-		case 'TTuple':
-			var a = t.a;
-			var b = t.b;
-			return 'Tuple' + (' ' + (author$project$Typecheck$typeToString(a) + (' ' + author$project$Typecheck$typeToString(b))));
-		default:
-			var a = t.a;
-			var b = t.b;
-			return author$project$Typecheck$typeToString(a) + (' -> ' + author$project$Typecheck$typeToString(b));
-	}
-};
-var elm$html$Html$br = _VirtualDom_node('br');
-var author$project$Render$renderErrorDiv = function (c) {
-	if (c.$ === 'Fails') {
-		var exp = c.b;
-		var got = c.c;
-		var out = c.d;
-		var gotStr = author$project$Typecheck$typeToString(got);
-		var expStr = author$project$Typecheck$typeToString(exp);
-		return A2(
-			elm$html$Html$div,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$class('error-details')
-				]),
-			_List_fromArray(
-				[
-					elm$html$Html$text('Expected: ' + expStr),
-					A2(elm$html$Html$br, _List_Nil, _List_Nil),
-					elm$html$Html$text('Got: ' + gotStr)
-				]));
-	} else {
-		return A2(
-			elm$html$Html$div,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$class('error-details')
-				]),
-			_List_Nil);
-	}
-};
-var elm$html$Html$span = _VirtualDom_node('span');
-var author$project$Render$renderSubtermsRec = F3(
-	function (i, ts, c) {
-		var renderNext = author$project$Render$renderSubtermsRec(i + 1);
-		var isFail = function () {
-			if (c.$ === 'Fails') {
-				var argNum = c.a;
-				var exp = c.b;
-				var got = c.c;
-				var out = c.d;
-				return _Utils_eq(i, argNum);
-			} else {
-				return false;
+				return 'Unification Failed';
 			}
 		}();
-		if (!ts.b) {
-			return _List_fromArray(
+		return (depth > 0) ? A2(
+			elm$html$Html$div,
+			_List_fromArray(
 				[
-					elm$html$Html$text('')
-				]);
-		} else {
-			if (!ts.b.b) {
-				var t = ts.a;
-				if (isFail) {
-					return _List_fromArray(
-						[
-							A2(
-							elm$html$Html$span,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('error-subterm')
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text(
-									author$project$Evaluate$termToString(t)),
-									author$project$Render$renderErrorDiv(c)
-								]))
-						]);
-				} else {
-					return _List_fromArray(
-						[
-							elm$html$Html$text(
-							author$project$Evaluate$termToString(t))
-						]);
-				}
-			} else {
-				var t = ts.a;
-				var ts2 = ts.b;
-				if (isFail) {
-					return _Utils_ap(
+					elm$html$Html$Attributes$class('tree-div')
+				]),
+			_Utils_ap(
+				A2(
+					elm$core$List$map,
+					function (c) {
+						return A3(author$project$Render$renderCallTreeRec, c, subs, depth - 1);
+					},
+					tree.children),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$div,
 						_List_fromArray(
 							[
-								A2(
-								elm$html$Html$span,
-								_List_fromArray(
-									[
-										elm$html$Html$Attributes$class('error-subterm')
-									]),
-								_List_fromArray(
-									[
-										elm$html$Html$text(
-										author$project$Evaluate$termToString(t)),
-										author$project$Render$renderErrorDiv(c)
-									]))
+								elm$html$Html$Attributes$class('text-div')
 							]),
-						A2(renderNext, ts2, c));
-				} else {
-					return _Utils_ap(
 						_List_fromArray(
 							[
 								elm$html$Html$text(
-								author$project$Evaluate$termToString(t))
-							]),
-						A2(renderNext, ts2, c));
-				}
-			}
-		}
+								author$project$Evaluate$termToString(tree.node.term) + (' : ' + typeString))
+							]))
+					]))) : A2(elm$html$Html$div, _List_Nil, _List_Nil);
 	});
-var author$project$Render$renderSubterms = F2(
-	function (t, c) {
-		var subterms = A2(
-			author$project$Render$intersperse,
-			elm$html$Html$text(' '),
-			A3(author$project$Render$renderSubtermsRec, 1, t, c));
-		if (subterms.b) {
-			var x = subterms.a;
-			var xs = subterms.b;
-			return xs;
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
 		} else {
-			return _List_Nil;
+			return _default;
 		}
 	});
-var author$project$Render$renderTermInline = F2(
-	function (result, t) {
-		var opStr = function () {
-			switch (t.$) {
-				case 'CTerm':
-					return '';
-				case 'VTerm':
-					return '';
-				case 'BinTerm':
-					var op = t.a;
-					switch (op.$) {
-						case 'Plus':
-							return '+';
-						case 'Minus':
-							return '-';
-						case 'Times':
-							return '*';
-						case 'Div':
-							return '/';
-						case 'Mod':
-							return '%';
-						case 'Eq':
-							return '==';
-						case 'And':
-							return '&&';
-						default:
-							return '||';
-					}
-				case 'Lam':
-					return '->';
-				case 'App':
-					return ' ';
-				default:
-					return '';
-			}
-		}();
-		var isOp = function () {
-			switch (t.$) {
-				case 'CTerm':
-					return false;
-				case 'VTerm':
-					return false;
-				case 'EmptyTree':
-					return false;
-				case 'Tuple':
-					return false;
-				default:
-					return true;
-			}
-		}();
-		var argTerms = author$project$Render$listSubterms(t);
-		var subterms = A2(author$project$Render$renderSubterms, argTerms, result);
-		if (isOp) {
-			if (subterms.b) {
-				var x = subterms.a;
-				var xs = subterms.b;
-				return A2(
-					elm$html$Html$span,
-					_List_Nil,
-					_Utils_ap(
-						_List_fromArray(
-							[
-								x,
-								elm$html$Html$text(' ' + opStr)
-							]),
-						xs));
-			} else {
-				return elm$html$Html$text('rendering error');
-			}
-		} else {
-			return elm$html$Html$text(
-				author$project$Evaluate$termToString(t));
-		}
+var author$project$Render$renderCallTree = F2(
+	function (_n0, depth) {
+		var tree = _n0.a;
+		return A3(
+			author$project$Render$renderCallTreeRec,
+			author$project$Tree$Tree(tree),
+			A2(elm$core$Maybe$withDefault, _List_Nil, tree.node.subs),
+			depth);
 	});
-var author$project$Typecheck$checkResultToString = function (r) {
-	switch (r.$) {
-		case 'Checks':
-			var t = r.a;
-			return author$project$Typecheck$typeToString(t);
-		case 'Fails':
-			var argNum = r.a;
-			var exp = r.b;
-			var got = r.c;
-			var out = r.d;
-			return 'Fails ' + author$project$Typecheck$typeToString(out);
-		case 'Partial':
-			var t = r.a;
-			return 'Partial ' + author$project$Typecheck$typeToString(t);
-		default:
-			return 'Invalid';
-	}
-};
-var author$project$Render$renderTerm = function (node) {
-	var spanClass = function () {
-		var _n0 = node.check;
-		switch (_n0.$) {
-			case 'Checks':
-				return 'type-checks';
-			case 'Fails':
-				return 'type-fails';
-			case 'Partial':
-				return 'type-partial';
-			default:
-				return 'type-fails';
-		}
-	}();
-	return A2(
-		elm$html$Html$div,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('text-div')
-			]),
-		_List_fromArray(
-			[
-				A2(author$project$Render$renderTermInline, node.check, node.term),
-				elm$html$Html$text(' : '),
-				A2(
-				elm$html$Html$span,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class(spanClass)
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text(
-						author$project$Typecheck$checkResultToString(node.check))
-					]))
-			]));
-};
-var author$project$Render$render = function (_n0) {
-	var tree = _n0.a;
-	return tree.node.render ? A2(
-		elm$html$Html$div,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('tree-div')
-			]),
-		_Utils_ap(
-			A2(elm$core$List$map, author$project$Render$render, tree.children),
-			_List_fromArray(
-				[
-					author$project$Render$renderTerm(tree.node)
-				]))) : A2(elm$html$Html$div, _List_Nil, _List_Nil);
-};
 var elm$html$Html$button = _VirtualDom_node('button');
 var elm$html$Html$h3 = _VirtualDom_node('h3');
 var elm$virtual_dom$VirtualDom$Normal = function (a) {
@@ -6747,7 +6945,7 @@ var author$project$Main$renderWithUI = function (info) {
 					]),
 				_List_fromArray(
 					[
-						author$project$Render$render(info.renderTree)
+						A2(author$project$Render$renderCallTree, info.typecheck, info.depth)
 					])),
 				A2(
 				elm$html$Html$div,
@@ -6757,7 +6955,7 @@ var author$project$Main$renderWithUI = function (info) {
 					]),
 				_List_fromArray(
 					[
-						author$project$Main$renderSummary(info.evaluation),
+						author$project$Main$renderSummary(info),
 						A2(
 						elm$html$Html$h3,
 						_List_fromArray(
@@ -6789,20 +6987,20 @@ var author$project$Main$renderWithUI = function (info) {
 										_List_fromArray(
 											[
 												elm$html$Html$Events$onClick(
-												author$project$Main$DecDepth(info.id))
+												author$project$Main$DecDepth(info.name))
 											]),
 										_List_fromArray(
 											[
 												elm$html$Html$text('-')
 											])),
 										elm$html$Html$text(
-										elm$core$String$fromInt(0)),
+										elm$core$String$fromInt(info.depth)),
 										A2(
 										elm$html$Html$button,
 										_List_fromArray(
 											[
 												elm$html$Html$Events$onClick(
-												author$project$Main$IncDepth(info.id))
+												author$project$Main$IncDepth(info.name))
 											]),
 										_List_fromArray(
 											[
