@@ -5629,7 +5629,7 @@ var author$project$Evaluate$eval = F2(
 					var body = t.b;
 					return elm$core$Maybe$Just(
 						A3(author$project$Evaluate$VFun, e, name, body));
-				case 'App':
+				default:
 					var fn = t.a;
 					var arg = t.b;
 					var _n5 = evale(fn);
@@ -5647,10 +5647,6 @@ var author$project$Evaluate$eval = F2(
 					} else {
 						return elm$core$Maybe$Nothing;
 					}
-				case 'EmptyTree':
-					return elm$core$Maybe$Nothing;
-				default:
-					return elm$core$Maybe$Nothing;
 			}
 		}
 	});
@@ -6696,13 +6692,11 @@ var author$project$Evaluate$termToString = function (t) {
 		case 'App':
 			var t1 = t.a;
 			var t2 = t.b;
-			return '(' + (author$project$Evaluate$termToString(t1) + (author$project$Evaluate$termToString(t2) + ')'));
-		case 'Tuple':
+			return '(' + (author$project$Evaluate$termToString(t1) + (' ' + (author$project$Evaluate$termToString(t2) + ')')));
+		default:
 			var t1 = t.a;
 			var t2 = t.b;
 			return '(' + (author$project$Evaluate$termToString(t1) + (',' + (author$project$Evaluate$termToString(t2) + ')')));
-		default:
-			return '';
 	}
 };
 var author$project$Evaluate$valToString = function (v) {
