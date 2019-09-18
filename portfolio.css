@@ -38,7 +38,7 @@ tr {
 .portfolio-nav-wrapper {
     text-align: center;
     margin-top: 200px;
-    transition: margin-top 1.0s ease;
+    transition: margin-top 0.5s ease;
 }
 
 .portfolio-nav-wrapper.up {
@@ -53,7 +53,7 @@ tr {
     font-size: 60px;
     padding: 0px 90px;
     border-bottom: 3px none #373737;
-    transition: all 0.5s ease, border-bottom 0.2s;
+    transition: all 0.35s ease, border-bottom 0.2s;
 }
 
 #web-button {
@@ -61,18 +61,18 @@ tr {
 }
 
 #web-button:hover {
-    letter-spacing: 8px;
-    padding: 0px 78px;
+    letter-spacing: 10px;
+    padding: 0px 75px;
 }
 
-#ml-button {
+#research-button {
     margin: 0px -5px;
     color: #f7b733;
 }
 
-#ml-button:hover {
-    letter-spacing: 7px;
-    padding: 0px 34px;
+#research-button:hover {
+    letter-spacing: 10px;
+    padding: 0px 50px;
 }
 
 #fun-button {
@@ -80,8 +80,8 @@ tr {
 }
 
 #fun-button:hover {
-    letter-spacing: 8px;
-    padding: 0px 78px;
+    letter-spacing: 10px;
+    padding: 0px 75px;
 }
 
 .portfolio-img {

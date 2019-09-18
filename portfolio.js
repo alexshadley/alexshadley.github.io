@@ -1,7 +1,7 @@
 "use strict";
 
-var tabNames = ['web', 'ml', 'fun'];
-var buttonNames = ['web-button', 'ml-button', 'fun-button']
+var tabNames = ['web', 'research', 'fun'];
+var buttonNames = ['web-button', 'research-button', 'fun-button']
 var linkTypes = ['red-link', 'yellow-link', 'blue-link'];
 
 function startNavAnimation(callingTab) {
@@ -19,8 +19,8 @@ function initNav() {
     document.getElementById('web-button').onclick = function() {
         displayTab('web');
     }
-    document.getElementById('ml-button').onclick = function() {
-        displayTab('ml');
+    document.getElementById('research-button').onclick = function() {
+        displayTab('research');
     }
     document.getElementById('fun-button').onclick = function() {
         displayTab('fun');
@@ -55,8 +55,8 @@ function displayTab(tabName) {
     if(tabName == 'web'){
         document.getElementById('web-button').style.borderBottomColor = '#fc4a1a';
     }
-    if(tabName == 'ml'){
-        document.getElementById('ml-button').style.borderBottomColor = '#f7b733';
+    if(tabName == 'research'){
+        document.getElementById('research-button').style.borderBottomColor = '#f7b733';
     }
     if(tabName == 'fun'){
         document.getElementById('fun-button').style.borderBottomColor = '#4abdac';
@@ -68,8 +68,8 @@ window.onload = function() {
     document.getElementById('web-button').onclick = function() {
         startNavAnimation('web');
     }
-    document.getElementById('ml-button').onclick = function() {
-        startNavAnimation('ml');
+    document.getElementById('research-button').onclick = function() {
+        startNavAnimation('research');
     }
     document.getElementById('fun-button').onclick = function() {
         startNavAnimation('fun');
